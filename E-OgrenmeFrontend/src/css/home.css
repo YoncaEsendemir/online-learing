@@ -1,0 +1,54 @@
+.home-page {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  
+  .home-container {
+    flex: 1;
+    padding-top: 20px;
+    padding-bottom: 40px;
+  }
+  
+  .home-slider {
+    margin-bottom: 40px;
+  }
+  
+  .home-slider img {
+    height: 400px;
+    object-fit: cover;
+  }
+  
+  .category-list {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .category-list li {
+    background-color: #f8f9fa;
+    margin-bottom: 10px;
+    padding: 10px 15px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .category-list li:hover {
+    background-color: #e9ecef;
+    cursor: pointer;
+  }
+  
+  .card {
+    transition: transform 0.3s ease;
+  }
+  
+  .card:hover {
+    transform: translateY(-5px);
+  }
+  
+  @media (max-width: 768px) {
+    .home-slider img {
+      height: 200px;
+    }
+  }
+  
+  

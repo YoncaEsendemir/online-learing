@@ -1,0 +1,124 @@
+
+.link-text{
+    text-decoration: none;
+    color:lightgray;
+    cursor: pointer;
+    text-overflow: none;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    padding:0px 10px ;
+}
+
+.link-text:hover{
+    transition: all 0.6ms;
+    color: #83878a;
+}
+
+.icon-text{
+ font-family: Arial, Helvetica, sans-serif;
+ font-size: 25px;
+ color:#fff;
+ text-decoration: none;
+}
+
+.icon{
+    width: 70px;
+    height: 70px;
+    padding: 10px;
+    color:lightgrey; 
+    margin-right: 15px;
+}
+
+
+:root {
+    --primary-color: #1f3747;
+    --secondary-color: #83878a;
+    --light-bg: #f8f9fa;
+    --dark-bg: #1c1c1b;
+    --text-light: #ffffff;
+    --text-dark: #333333;
+}
+
+body[data-theme='light'] {
+    background-color: var(--light-bg);
+    color: var(--text-dark);
+}
+
+body[data-theme='dark'] {
+    background-color: var(--dark-bg);
+    color: var(--text-light);
+}
+
+.top-bar {
+   background-color: #cfcfd1;
+    color: var(--text-light);
+    height: 45px;
+
+}
+
+.welcome-text {
+    margin-bottom: 0;
+}
+
+.nav-link {
+    color: var(--text-light);
+    transition: color 0.3s;
+}
+
+.nav-link:hover {
+    color: var(--secondary-color);
+}
+
+.brand-text {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.social-icon {
+    color: var(--text-light);
+    margin-right: 10px;
+    transition: color 0.3s;
+}
+
+.social-icon:hover {
+    color: var(--secondary-color);
+}
+
+.theme-toggle {
+    background: none;
+    border: none;
+    color: var(--text-light);
+    cursor: pointer;
+}
+
+@media (max-width: 768px) {
+    .top-bar {
+        text-align: center;
+    }
+    
+    .nav {
+        justify-content: center;
+    }
+}
+
+.navbar-nav .nav-link {
+    padding: 0.5rem 1rem;
+}
+
+.form-control {
+    width: 200px;
+}
+
+@media (max-width: 992px) {
+    .form-control {
+        width: 100%;
+    }
+    
+    .navbar-nav {
+        margin-top: 1rem;
+    }
+    
+    .social-icons {
+        margin-top: 1rem;
+        justify-content: center;
+    }
+}

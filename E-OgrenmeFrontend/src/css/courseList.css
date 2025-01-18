@@ -1,0 +1,39 @@
+.course-list-container {
+    padding: 20px;
+  }
+  
+  .course-table {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .course-table th {
+    background-color: #f8f9fa;
+    border-bottom: 2px solid #dee2e6;
+  }
+  
+  .course-table td {
+    vertical-align: middle;
+  }
+  
+  .add-course-btn {
+    margin-bottom: 20px;
+    padding: 10px 20px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .action-buttons {
+    display: flex;
+    gap: 0.5rem;
+  }
+  
+  .action-buttons button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  

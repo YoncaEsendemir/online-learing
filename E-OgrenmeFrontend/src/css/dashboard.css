@@ -1,0 +1,46 @@
+.dashboard-container {
+  padding: 20px;
+  background-color: #f8f9fa;
+  min-height: 100vh;
+}
+
+.dashboard-title {
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.dashboard-stat {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #007bff;
+}
+
+.card {
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+  margin-bottom: 20px;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
+
+.btn-primary {
+  background-color: #007bff;
+  border-color: #007bff;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+  border-color: #0056b3;
+}
+
+.activity-list, .event-list {
+  padding-left: 20px;
+}
+
+.activity-list li, .event-list li {
+  margin-bottom: 10px;
+}
+

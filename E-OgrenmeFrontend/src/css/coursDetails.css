@@ -1,0 +1,34 @@
+.sticky-top {
+    z-index: 100;
+  }
+  
+  .object-cover {
+    object-fit: cover;
+  }
+  
+  /* Custom scrollbar for better UX */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .sticky-top {
+      position: relative !important;
+      top: 0 !important;
+    }
+  }
+  

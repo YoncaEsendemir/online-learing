@@ -1,0 +1,79 @@
+.course-creation-page {
+  padding: 2rem 0;
+}
+
+.course-creation-page h1 {
+  color: #333;
+  margin-bottom: 2rem;
+}
+
+.ck-editor__editable {
+  min-height: 200px;
+  max-height: 400px;
+}
+
+.ck.ck-editor {
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.ck-content {
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.card {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border: none;
+  border-radius: 8px;
+}
+
+.card-title {
+  color: #2c3e50;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+}
+
+.form-label {
+  font-weight: 600;
+  color: #34495e;
+}
+
+.form-control {
+  border-radius: 4px;
+}
+
+.form-control:focus {
+  box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+}
+
+.btn-primary {
+  background-color: #3498db;
+  border-color: #3498db;
+}
+
+.btn-primary:hover {
+  background-color: #2980b9;
+  border-color: #2980b9;
+}
+
+.btn-secondary {
+  background-color: #95a5a6;
+  border-color: #95a5a6;
+}
+
+.btn-secondary:hover {
+  background-color: #7f8c8d;
+  border-color: #7f8c8d;
+}
+
+.btn-danger {
+  background-color: #e74c3c;
+  border-color: #e74c3c;
+}
+
+.btn-danger:hover {
+  background-color: #c0392b;
+  border-color: #c0392b;
+}
+

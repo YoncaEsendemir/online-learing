@@ -1,0 +1,45 @@
+.category-container {
+    padding: 20px;
+  }
+  
+  .add-category-card,
+  .category-list-card {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: none;
+    border-radius: 8px;
+  }
+  
+  .add-category-card .card-header,
+  .category-list-card .card-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+    padding: 1rem;
+  }
+  
+  .category-table {
+    margin-bottom: 0;
+  }
+  
+  .category-table th {
+    background-color: #f8f9fa;
+    border-bottom: 2px solid #dee2e6;
+  }
+  
+  .category-table td {
+    vertical-align: middle;
+  }
+  
+  .btn-outline-primary,
+  .btn-outline-danger {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  @media (max-width: 992px) {
+    .add-category-card {
+      margin-bottom: 20px;
+    }
+  }
+  
+  
