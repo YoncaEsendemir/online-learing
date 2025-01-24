@@ -1,6 +1,6 @@
 package com.eogrenme.entits;
 
-import java.math.BigDecimal;
+//import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -35,9 +35,6 @@ public class Enrollment {
     @ManyToOne
     @JoinColumn(name = "course_id", nullable = false)
     private Course course;
-
-    @Column(name = "progress")
-     private BigDecimal progress;
 
     @CreationTimestamp
      @Column(name = "createAt")

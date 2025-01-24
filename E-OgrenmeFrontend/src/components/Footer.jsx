@@ -5,7 +5,7 @@ import '../css/Footer.css';
 
 function Footer() {
   return (
-    <footer className="footer">
+    <footer className="footer headerFooterColor">
       <Container>
         <Row className="align-items-center">
           <Col md={6} className="text-center text-md-start mb-3 mb-md-0">

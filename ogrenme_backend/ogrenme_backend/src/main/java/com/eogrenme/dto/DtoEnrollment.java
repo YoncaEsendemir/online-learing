@@ -1,8 +1,6 @@
 package com.eogrenme.dto;
-import java.math.BigDecimal;
+//import java.math.BigDecimal;
 import java.time.LocalDateTime;
-
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,7 +11,10 @@ import lombok.NoArgsConstructor;
 public class DtoEnrollment {
     private Long id;
     private Long userId;
-    private DtoCourse courseId;
-    private BigDecimal progress;
+    private Long courseId;  // Changed from DtoCourse to Long
+    private String courseTitle;
+    private String courseImage;
+    private String courseDescription;
+   // private BigDecimal progress;
     private LocalDateTime createdAt;
 }

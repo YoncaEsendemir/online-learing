@@ -59,9 +59,8 @@ function CourseList() {
           <tr>
             <th>Title</th>
             <th>Image</th>
-            <th>Eğitim Amacı</th>
-            <th>Eğitim Özeti</th>
             <th>Açıklama</th>
+            <th>Eğitim Detayları</th>
             <th>Price</th>
             <th>Created</th>
             <th>Actions</th>
@@ -78,11 +77,11 @@ function CourseList() {
                   style={{ width: '150px', height: '100px', marginLeft: '50px' }}
                 />
               </td>
-              <td>{course.educationSummary}</td>
-              <td>{course.educationalPurpose}</td>
               <td>{course.description}</td>
+              <td>{course.educationDetails}</td>
               <td>${course.price}</td>
-              <td>{new Date(course.createdAt).toLocaleDateString('tr-TR')}</td>
+              <td> {new Date(course.createdAt).toLocaleDateString('tr-TR')}</td>
+              
               <td>
                 <Button
                   variant="info"

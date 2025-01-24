@@ -3,23 +3,32 @@ package com.eogrenme.serviece.impl;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.eogrenme.entits.User;
 import com.eogrenme.Md5.PasswordUtil;
+import com.eogrenme.dto.DtoSearchCriteria;
 import com.eogrenme.dto.DtoUser;
 import com.eogrenme.dto.DtoUserIdEmail;
 import com.eogrenme.dto.DtoUserUI;
+import org.springframework.transaction.annotation.Transactional;
+import com.eogrenme.repository.IRepositoryComment;
 import com.eogrenme.repository.IRepositoryUser;
 import com.eogrenme.serviece.IServiceUser;
 
-@Service
+
+
+@Service //Bu sınıf, Spring Service Layer'da çalışır ve iş mantığını barındırır.
 public class ServiceUser implements IServiceUser {
 
     @Autowired
     private IRepositoryUser repositoryUser;
+
+  @Autowired
+    private IRepositoryComment repositoryComment;
 
     // id göre Kullanıcıyı getirir 
     @Override
@@ -33,6 +42,9 @@ public class ServiceUser implements IServiceUser {
        BeanUtils.copyProperties(userDb, dto);
         return dto;
     }
+
+
+
 
     // role kontrollu 
     @Override
@@ -95,10 +107,16 @@ public class ServiceUser implements IServiceUser {
     }
 
     // Delete User SİLME method
+    // Delete User SİLME method
     @Override
+    @Transactional
     public Boolean deleteUserById(Long id) {
         Optional<User>optional = repositoryUser.findById(id);
         if(optional.isPresent()){
+            // First, delete all comments associated with this user
+            repositoryComment.deleteAllByUserId(id);
+
+            // Now delete the user
             repositoryUser.delete(optional.get());
             return true;
         }
@@ -129,6 +147,18 @@ public class ServiceUser implements IServiceUser {
         repositoryUser.save(dbUser);
         // Güncellenmiş Kullanıcı verilerini dto 
         return true;
+    }
+
+      @Override
+    public List<DtoUser> searchUsers(DtoSearchCriteria criteria) {
+        List<User> users = repositoryUser.searchUsers(criteria.getUsername(), criteria.getEmail());
+        return users.stream()
+                    .map(user -> {
+                        DtoUser dto = new DtoUser();
+                        BeanUtils.copyProperties(user, dto);
+                        return dto;
+                    })
+                    .collect(Collectors.toList());
     }
 
 }

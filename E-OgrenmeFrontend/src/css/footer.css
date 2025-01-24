@@ -1,5 +1,4 @@
 .footer {
-  background-color: #1f3747;
   color: #fff;
   padding: 10px 0;
   width: 100%;
@@ -12,6 +11,10 @@
   margin: 0;
   display: flex;
   justify-content: center;
+}
+
+.headerFooterColor{
+  background: linear-gradient(135deg, #1b2b45 0%, #0a012d 100%);
 }
 
 .social-icons li {

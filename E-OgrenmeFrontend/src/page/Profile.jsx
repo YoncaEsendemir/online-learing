@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Form, Button, Container, Row, Col, Table, Card, Image } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchUserById, deleteUser, editUser } from '../redux/slice/userSlice';
-import { fetchEnrollmentByUserId} from '../redux/slice/enrollmentSlice'
+import { fetchEnrollmentByUserId} from '../redux/slice/enrollmentSlice';
+import {fetchCourseById} from '../redux/slice/courseSlice';
 import { FaEdit, FaTrash, FaUser } from 'react-icons/fa';
 import Loader from '../components/Loading';
 import '../css/Profile.css';
@@ -12,19 +13,24 @@ function Profile() {
   const { user, status, error } = useSelector((state) => state.user);
   const [message, setMessage] = useState(null);
   const [profile, setProfile] = useState({});
-  const { enrollmentList, status: enrollmentStatus } = useSelector((state) => state.enrollment);
+  const {enrollmentList, status: enrollmentStatus } = useSelector((state) => state.enrollment);
   const [profileImage, setProfileImage] = useState(null);
 
-
-
   // Kullanıcıyı localStorage'dan al ve fetchUserById çağır
-  useEffect(() => {
+  useEffect(()=> {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
       const userInfo = JSON.parse(storedUser);
       if (userInfo.id) {
         dispatch(fetchUserById(userInfo.id));
         dispatch(fetchEnrollmentByUserId(userInfo.id)); // Kullanıcı ID'ye göre
+
+        /*
+        if(enrollmentList.courseId){
+         dispatch(fetchCourseById())
+        }*/
+
+
       }
     }
   }, [dispatch]);
@@ -99,6 +105,7 @@ function Profile() {
     return <div className="error">Hata: {error}</div>;
   }
 
+  const isAdmin = user?.id=== 1;
   return (
     <Container fluid className="profile-container">
       <Row>
@@ -176,9 +183,10 @@ function Profile() {
                   />
                 </Form.Group>
                 <div className="d-flex justify-content-between">
+          {/* 
                   <Button variant="danger" type="button" onClick={handleDelete}>
                     <FaTrash /> Hesap Sil
-                  </Button>
+                  </Button>*/}
                   <Button variant="primary" type="submit">
                     <FaEdit /> Hesap Düzenle
                   </Button>
@@ -187,6 +195,17 @@ function Profile() {
             </Card.Body>
           </Card>
         </Col>
+        {( isAdmin &&
+          <Col>
+        <Card>
+              <Card.Body>
+              <h3 className="mb-4">Admin</h3>
+              <span>{profile.name} </span>
+              </Card.Body>
+        </Card>
+          </Col>
+        )}
+        { !isAdmin && (
         <Col md={5} lg={4}>
           <Card className="course-list-card">
             <Card.Body>
@@ -195,34 +214,19 @@ function Profile() {
                 <thead>
                   <tr>
                     <th>Kurs Adı</th>
-                    <th>İlerleme</th>
                   </tr>
                 </thead>
                 <tbody>
                   {enrollmentList.map((enrollment) => (
                     <tr key={enrollment.id}>
-                      <td>{enrollment.name}</td>
-                      <td>
-                        <div className="progress">
-                          <div
-                            className="progress-bar"
-                            role="progressbar"
-                            style={{ width: `${enrollment.progress}%` }}
-                            aria-valuenow={enrollment.progress}
-                            aria-valuemin="0"
-                            aria-valuemax="100"
-                          >
-                            {enrollment.progress}%
-                          </div>
-                        </div>
-                      </td>
+                      <td>{enrollment.courseTitle}</td>
                     </tr>
                   ))}
                 </tbody>
               </Table>
             </Card.Body>
           </Card>
-        </Col>
+        </Col> ) }
       </Row>
     </Container>
   );

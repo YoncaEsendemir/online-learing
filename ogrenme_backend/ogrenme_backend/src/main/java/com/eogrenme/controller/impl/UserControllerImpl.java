@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.eogrenme.MultipartUpload.UploadUserProfil;
 import com.eogrenme.controller.IUserController;
+import com.eogrenme.dto.DtoSearchCriteria;
 import com.eogrenme.dto.DtoUser;
 import com.eogrenme.dto.DtoUserIdEmail;
 import com.eogrenme.dto.DtoUserUI;
@@ -112,6 +113,12 @@ public class UserControllerImpl implements IUserController {
             e.printStackTrace();
             return ResponseEntity.internalServerError().build();
         }
+    }
+
+        @PostMapping("/search")
+    public ResponseEntity<List<DtoUser>> searchUsers(@RequestBody DtoSearchCriteria criteria) {
+        List<DtoUser> users = servieceUser.searchUsers(criteria);
+        return ResponseEntity.ok(users);
     }
 
 }

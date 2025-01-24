@@ -1,6 +1,8 @@
 package com.eogrenme.serviece;
 
 import java.util.List;
+
+import com.eogrenme.dto.CourseSearchCriteria;
 import com.eogrenme.dto.DtoCourseUI;
 
 public interface IServiceCourse {
@@ -10,4 +12,5 @@ public interface IServiceCourse {
     boolean deleteCourse(Long id);
     List<DtoCourseUI> getAllCourses();
     DtoCourseUI getCourseById(Long id);
+    List<DtoCourseUI> searchCourses(CourseSearchCriteria criteria);
 }

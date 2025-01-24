@@ -24,28 +24,28 @@ function RouterConfig() {
     <Routes>
       {/* Genel Erişim Rotası */}
       <Route path='/' element={<Home />} />
-      <Route path='/contact' element={<Contact/>} />
-      <Route path='/about' element={<About/>} />
+      <Route path='/contact' element={<Contact />} />
+      <Route path='/about' element={<About />} />
       <Route path='/register' element={<Register />} />
-      <Route path='/coursDetail/:courseId' element={<CourseDetail/>}/>
+      <Route path='/coursDetail/:courseId' element={<CourseDetail />} />
       <Route path='/login' element={<Login />} />
 
-
-      {/* tek kullanıcı ve Admin erişebilir */}
+      {/* Tek kullanıcı ve Admin erişebilir */}
       <Route path='/userlist' element={<AppWrapper><SidebarLayout><UserList /></SidebarLayout></AppWrapper>} />
       <Route path='/dashboard' element={<AppWrapper><SidebarLayout><Dashboard /></SidebarLayout></AppWrapper>} />
       <Route path='/addCourse' element={<AppWrapper><SidebarLayout><AddCourse /></SidebarLayout></AppWrapper>} />
       <Route path='/courseList' element={<AppWrapper><SidebarLayout><CourseList /></SidebarLayout></AppWrapper>} />
       <Route path='/courseUpdate/:courseId' element={<AppWrapper><SidebarLayout><UpdateCourse /></SidebarLayout></AppWrapper>} />
-      <Route path='/categoryList' element={<AppWrapper><SidebarLayout><CategoryList /></SidebarLayout> </AppWrapper>} />
+      <Route path='/categoryList' element={<AppWrapper><SidebarLayout><CategoryList /></SidebarLayout></AppWrapper>} />
       <Route path='/profile' element={<AppWrapper><SidebarLayout><Profile /></SidebarLayout></AppWrapper>} />
       <Route path='/myCourse' element={<AppWrapper><SidebarLayout><MyCourse /></SidebarLayout></AppWrapper>} />
       <Route path='/coursevideo/:courseId' element={<AppWrapper><SidebarLayout><CoursVideo /></SidebarLayout></AppWrapper>} />
-      <Route path='/payment' element={<AppWrapper><Payment/></AppWrapper>}/>
-      <Route path='/payment' element={<AppWrapper><Payment/></AppWrapper>}/>
+      <Route path='/payment' element={<AppWrapper><Payment /></AppWrapper>} />
+
+      {/* 404 Yönlendirme */}
+      <Route path="*" element={<h1>404 - Sayfa Bulunamadı</h1>} />
     </Routes>
   );
 }
 
 export default RouterConfig;
-

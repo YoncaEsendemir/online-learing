@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { useParams, useNavigate } from "react-router-dom";
-import { Container, Row, Col, Card, Badge, Button, Tab, Tabs, ListGroup, Image } from 'react-bootstrap'
+import { Container, Row, Col, Card, Badge, Button, Tab, Tabs, ListGroup, Image,  } from 'react-bootstrap'
 import { FaRegClock, FaUserGraduate } from 'react-icons/fa'
 import { fetchCourseById } from '../redux/slice/courseSlice';
+import { fetchCommentsByCourseId } from "../redux/slice/commentSlice"
 import { fetchEnrollmentByCourseId } from '../redux/slice/enrollmentSlice';
+import { fetchVideoByCoursId } from '../redux/slice/videoSlice'
 import { useDispatch, useSelector } from 'react-redux';
 import '../css/coursDetails.css'
 
@@ -12,16 +14,28 @@ function CourseDetail() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { loggedInUser } = useSelector((state) => state.user);
+  const [amount, setAmount] = useState(null);
   const { course, status: courseStatus, error: courseError } = useSelector((state) => state.course);
+  const { videoList } = useSelector((state) => state.video);
   const { enrollmentList, status: enrollmentStatus } = useSelector((state) => state.enrollment);
+  const { comments, status: commentStatus } = useSelector((state) => state.comment)
   const [isEnrolled, setIsEnrolled] = useState(false);
 
   useEffect(() => {
     if (courseId) {
       dispatch(fetchCourseById(courseId));
       dispatch(fetchEnrollmentByCourseId(courseId));
+      dispatch(fetchVideoByCoursId(courseId));
+      dispatch(fetchCommentsByCourseId(courseId))
     }
   }, [courseId, dispatch]);
+
+  useEffect(() => {
+    if (course?.price) {
+      setAmount(course.price);
+      console.log(course.price);
+    }
+  }, [course])
 
   useEffect(() => {
     if (loggedInUser && enrollmentList.length > 0) {
@@ -38,7 +52,12 @@ function CourseDetail() {
     } else if (isEnrolled) {
       navigate('/dashboard');
     } else {
-      navigate('/payment', { state: { courseId } });
+      if (amount !== null) {
+        navigate('/payment', { state: { loggedInUser, courseId, amount } });
+      }
+      else {
+        alert("Ödeme miktarı yüklenemedi, lütfen tekrar deneyin.");
+      }
     }
   }
 
@@ -133,14 +152,32 @@ function CourseDetail() {
                     </Tab>
                     <Tab eventKey="content" title="İçerik">
                       <ListGroup variant="flush">
-                        <ListGroup.Item className="d-flex justify-content-between align-items-center">
-                          <div>
-                            <h6 className="mb-0">1. Giriş</h6>
-                            <small className="text-muted">{course?.duration || "Kayıt Süresi"}</small>
-                          </div>
-                          <Badge bg="primary" pill>Ücretsiz</Badge>
-                        </ListGroup.Item>
-                        {/* Add more content items as needed */}
+                        {videoList.map((video) => (
+                          <ListGroup.Item key={video.id} className="d-flex justify-content-between align-items-center">
+                            <div>
+                              <h6 className="mb-0">{video?.title || "Video başlığı"}</h6>
+                              <small className="text-muted">{video?.duration || "Kayıt Süresi"}</small>
+                            </div>
+                            <Badge bg="primary" pill>
+                              Kurs Al
+                            </Badge>
+                          </ListGroup.Item>
+                        ))}
+                      </ListGroup>
+                    </Tab>
+                    <Tab eventKey="comments" title="Yorumlar">
+                      <ListGroup variant="flush">
+                        {comments.length > 0 ? (
+                          comments.map((comment) => (
+                            <ListGroup.Item key={comment.id}>
+                              <div>
+                                <small className="text-muted">{comment.content || "Yorum bulunamadı"}</small>
+                              </div>
+                            </ListGroup.Item>
+                          ))
+                        ) : (
+                          <ListGroup.Item>Henüz yorum yok.</ListGroup.Item>
+                        )}
                       </ListGroup>
                     </Tab>
                   </Tabs>
@@ -155,4 +192,3 @@ function CourseDetail() {
 }
 
 export default CourseDetail
-

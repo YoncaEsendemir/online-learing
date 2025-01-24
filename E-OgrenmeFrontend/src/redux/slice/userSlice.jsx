@@ -78,6 +78,12 @@ export const deleteUser = createAsyncThunk('users/deleteUser', async (userId, { 
   }
 });
 
+// Kullanıcı arama (POST /rest/api/user/search)
+export const searchUsers = createAsyncThunk("users/searchUsers", async (criteria) => {
+  const response = await axios.post(`${BASE_URL}/search`, criteria)
+  return response.data
+})
+
 // Slice oluşturma
 const userSlice = createSlice({
   name: 'user',
@@ -178,6 +184,21 @@ const userSlice = createSlice({
       state.status = 'failed';
       state.error = action.payload || action.error.message;
     });
+
+    // Kullanıcı arama durumları
+    builder
+      .addCase(searchUsers.pending, (state) => {
+        state.status = "loading"
+      })
+      .addCase(searchUsers.fulfilled, (state, action) => {
+        state.status = "succeeded"
+        state.users = action.payload
+      })
+      .addCase(searchUsers.rejected, (state, action) => {
+        state.status = "failed"
+        state.error = action.error.message
+      })
+
   },
 });
 

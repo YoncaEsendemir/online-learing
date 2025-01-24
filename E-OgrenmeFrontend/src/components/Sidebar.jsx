@@ -37,10 +37,12 @@ const dispatch=useDispatch();
           <FaHome className="nav-icon" />
           <span className="nav-text">Dashboard</span>
         </Nav.Link>
+        {!isAdmin &&(
         <Nav.Link as={Link} to="/myCourse">
-          <FaHome className="nav-icon" />
-          <span className="nav-text">Eğitimlerim</span>
-        </Nav.Link>
+        <FaHome className="nav-icon" />
+        <span className="nav-text">Eğitimlerim</span>
+      </Nav.Link>
+        )}
         <Nav.Link as={Link} to="/profile">
           <FaUser className="nav-icon" />
           <span className="nav-text">Profile</span>

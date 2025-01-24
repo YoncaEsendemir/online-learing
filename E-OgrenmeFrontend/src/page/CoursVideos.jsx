@@ -1,68 +1,100 @@
-import React, { useEffect, useState } from 'react';
-import { fetchVideoByCoursId } from '../redux/slice/videoSlice';
-import { Link, useParams } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Container, Row, Col } from 'react-bootstrap';
+import { fetchVideoByCoursId } from '../redux/slice/videoSlice';
+import { useParams } from 'react-router-dom';
+import { Container, Row, Col, Card } from 'react-bootstrap';
 
-function CoursVideos() {
+function VideoPlayer() {
   const { courseId } = useParams();
   const dispatch = useDispatch();
-  const { videoList, status: videoStatus, error: videoError } = useSelector((state) => state.video);
-
-  // Seçili video URL'sini tutmak için bir state
+  const { videoList, status } = useSelector((state) => state.video);
   const [selectedVideo, setSelectedVideo] = useState(null);
 
-  // courseId'ye göre videoları fetch etmek
   useEffect(() => {
     if (courseId) {
       dispatch(fetchVideoByCoursId(courseId));
     }
   }, [courseId, dispatch]);
 
-  // Videonun yüklenme durumu
-  if (videoStatus === 'loading') return <p>Videolar yükleniyor...</p>;
-  if (videoError) return <p>Hata: {videoError}</p>;
+  useEffect(() => {
+    if (videoList.length > 0 && !selectedVideo) {
+      setSelectedVideo(videoList[0]);
+    }
+  }, [videoList, selectedVideo]);
 
+  if (status === 'loading') {
+    return <div>Loading...</div>;
+  }
+
+  console.log('courseId:', courseId);
+  console.log('videoList:', videoList);
   return (
-    <Container>
-      <Row className="mt-5">
-        {/* Video Oynatıcı */}
+    <Container fluid>
+      <Row className="mt-4">
+        {/* Video Player Section */}
         <Col md={9}>
-          <h1>Video Oynatıcı</h1>
-          {selectedVideo ? (
-            <video width="640" height="360" controls>
-              <source src={selectedVideo} type="video/mp4" />
-              Tarayıcınız video oynatmayı desteklemiyor.
-            </video>
-          ) : (
-            <p>Lütfen bir video seçin.</p>
-          )}
+          <Card className="mb-4">
+            <Card.Body>
+              {selectedVideo ? (
+                <>
+                  <video 
+                    className="w-100" 
+                    style={{ aspectRatio: '16/9' }}
+                    controls
+                    key={selectedVideo.url}
+                  >
+                    <source  src={`http://localhost:8080${selectedVideo.url}`} type="video/mp4" />
+                    Your browser does not support the video tag.
+                  </video>
+                  <h3 className="mt-3">{selectedVideo.title}</h3>
+                </>
+              ) : (
+                <div 
+                  className="d-flex align-items-center justify-content-center"
+                  style={{ aspectRatio: '16/9', backgroundColor: '#f8f9fa' }}
+                >
+                  <p className="text-muted">Lütfen izlemek için bir video seçin</p>
+                </div>
+              )}
+            </Card.Body>
+          </Card>
         </Col>
 
-        {/* Video Listesi */}
+        {/* Video List Section */}
         <Col md={3}>
-          <h2 className="mb-4">Videolar</h2>
-          <ul className="category-list">
-            {videoList &&
-              videoList.map((video) => (
-                <li key={video.id}>
-                  {/* Tıklama ile seçili videoyu değiştir */}
-                  <Link
-                    to="#"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      setSelectedVideo(video.url); // Videonun URL'sini state'e ata
-                    }}
+          <Card>
+            <Card.Header>
+              <h4 className="mb-0">Video Listesi</h4>
+            </Card.Header>
+            <Card.Body>
+              <div className="video-list" style={{ maxHeight: '500px', overflowY: 'auto' }}>
+                {videoList && videoList.map((video) => (
+                  <div
+                    key={video.id}
+                    className={`p-2 cursor-pointer ${
+                      selectedVideo?.id === video.id ? 'bg-primary text-white' : 'hover:bg-light'
+                    }`}
+                    onClick={() => setSelectedVideo(video)}
+                    style={{ cursor: 'pointer' }}
                   >
-                    {video.name}
-                  </Link>
-                </li>
-              ))}
-          </ul>
+                    <div className="d-flex align-items-center">
+                      <div className="ms-2">
+                        <h6 className="mb-0">{video.title}</h6>
+                        {video.duration && (
+                          <small className="text-muted">{video.duration}</small>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </Card.Body>
+          </Card>
         </Col>
       </Row>
     </Container>
   );
 }
 
-export default CoursVideos;
+export default VideoPlayer;
+

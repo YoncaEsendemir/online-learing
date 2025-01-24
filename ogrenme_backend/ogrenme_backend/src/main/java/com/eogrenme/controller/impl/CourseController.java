@@ -12,6 +12,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.eogrenme.MultipartUpload.UploadFileMulti;
 import com.eogrenme.MultipartUpload.UploadFileVideoMulti;
 import com.eogrenme.controller.ICourseController;
+import com.eogrenme.dto.CourseSearchCriteria;
 import com.eogrenme.dto.DtoCourseUI;
 import com.eogrenme.serviece.IServiceCourse;
 
@@ -109,6 +110,12 @@ public class CourseController implements ICourseController {
             e.printStackTrace();
             return ResponseEntity.internalServerError().build();
         }
+    }
+
+        @PostMapping("/search")
+    public ResponseEntity<List<DtoCourseUI>> searchCourses(@RequestBody CourseSearchCriteria criteria) {
+        List<DtoCourseUI> courses = iServieceCourse.searchCourses(criteria);
+        return ResponseEntity.ok(courses);
     }
 }
 

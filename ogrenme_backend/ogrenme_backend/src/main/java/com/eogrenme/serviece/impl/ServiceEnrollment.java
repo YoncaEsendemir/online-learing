@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import com.eogrenme.entits.User;
 import com.eogrenme.entits.Course;
 import com.eogrenme.dto.DtoEnrollment;
-import com.eogrenme.dto.DtoCourse;
+
 import com.eogrenme.entits.Enrollment;
 import com.eogrenme.repository.IRepositoryCourse;
 import com.eogrenme.repository.IRepositoryEnrollment;
@@ -85,15 +85,23 @@ public class ServiceEnrollment implements IServiceEnrollment {
     
     @Override
     public DtoEnrollment saveEnrollment(DtoEnrollment enrollment) {
+        // Önce mevcut kaydı kontrol et
+        Optional<Enrollment> existingEnrollment = repositoryEnrollment.findByUserIdAndCourseId(
+            enrollment.getUserId(), enrollment.getCourseId());
+        
+        if (existingEnrollment.isPresent()) {
+            throw new RuntimeException("Bu kullanıcı zaten bu kursa kayıtlı!");
+        }
+
         Enrollment enrollmentDb = new Enrollment();
         User user = repositoryUser.findById(enrollment.getUserId())
                       .orElseThrow(()->new RuntimeException("Kullanıcı bulunamadı !"));
-        Course course =repositoryCourse.findById(enrollment.getCourseId().getId())
+        Course course =repositoryCourse.findById(enrollment.getCourseId())
                         .orElseThrow(()->new RuntimeException("Course bulunamadı"));
                         
                         enrollmentDb.setUser(user);
                         enrollmentDb.setCourse(course);
-                        enrollmentDb.setProgress(enrollment.getProgress());
+                     //   enrollmentDb.setProgress(enrollment.getProgress());
                         enrollmentDb.setCreatedAt(LocalDateTime.now());
 
                         Enrollment savedEnrollmentDb= repositoryEnrollment.save(enrollmentDb);
@@ -105,8 +113,12 @@ public class ServiceEnrollment implements IServiceEnrollment {
     private DtoEnrollment  convertToDto(Enrollment enrollment){
         DtoEnrollment dto= new DtoEnrollment();
         BeanUtils.copyProperties(enrollment, dto);
-        dto.setCourseId(new DtoCourse(enrollment.getCourse().getId(), enrollment.getCourse().getTitle(), null, null, enrollment.getCourse().getPrice(), enrollment.getCourse().getImageUrl()));
+        dto.setCourseId(enrollment.getCourse().getId());
         dto.setUserId(enrollment.getUser().getId());
+        dto.setCourseTitle(enrollment.getCourse().getTitle()); 
+        dto.setCourseImage(enrollment.getCourse().getImageUrl()); 
+        dto.setCourseDescription(enrollment.getCourse().getDescription()); 
+      
         return dto;
     }
 

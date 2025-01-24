@@ -69,11 +69,7 @@ const Login = () => {
             </Alert>
           )}
 
-          <div className="text-center mb-3">
-            <Link to="/forgot-password" className="forgot-password">
-              Şifremi Unuttum
-            </Link>
-          </div>
+    
         </Form>
         <div className="register-link">
           <p>

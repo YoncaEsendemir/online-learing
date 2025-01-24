@@ -19,6 +19,11 @@ target/
 *.iml
 *.ipr
 
+# Büyük video dosyalarını hariç tut
+*.mp4
+*.mov
+*.avi
+
 ### NetBeans ###
 /nbproject/private/
 /nbbuild/

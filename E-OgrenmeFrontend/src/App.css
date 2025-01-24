@@ -112,6 +112,10 @@ body[data-theme='dark'] {
     color: var(--secondary-color);
 }
 
+.headerFooterColor{
+    background: linear-gradient(135deg, #1b2b45 0%, #0a012d 100%);
+}
+
 @media (max-width: 768px) {
     .top-bar {
         text-align: center;

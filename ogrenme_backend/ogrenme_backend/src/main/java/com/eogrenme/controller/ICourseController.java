@@ -1,4 +1,5 @@
 package com.eogrenme.controller;
+import com.eogrenme.dto.CourseSearchCriteria;
 import com.eogrenme.dto.DtoCourseUI;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,4 +20,6 @@ public interface ICourseController {
 
   
     ResponseEntity<DtoCourseUI> getCourseById( Long id);
+
+    ResponseEntity<List<DtoCourseUI>>searchCourses(CourseSearchCriteria criteria);
 }

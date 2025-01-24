@@ -1,58 +1,62 @@
-import React, { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { fetchUsers, deleteUser } from '../redux/slice/userSlice';
-import { FaTrash } from 'react-icons/fa';
-import { Table, Container, Button, Form, InputGroup, Modal } from 'react-bootstrap';
-import { Search } from 'react-bootstrap-icons';
-import '../css/userList.css';
-import Loader from '../components/Loading';
+import React, { useEffect, useState } from "react"
+import { useSelector, useDispatch } from "react-redux"
+import { fetchUsers, deleteUser, searchUsers } from "../redux/slice/userSlice"
+import { FaTrash } from "react-icons/fa"
+import { Table, Container, Button, Form, InputGroup, Modal } from "react-bootstrap"
+import { Search } from "react-bootstrap-icons"
+import "../css/userList.css"
+import Loader from "../components/Loading"
 
 const UserList = () => {
-  const dispatch = useDispatch();
-  const { users = [], status, error } = useSelector((state) => state.user); // Boş bir dizi varsayılan olarak eklendi
-  const [searchTerm, setSearchTerm] = useState('');
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [userToDelete, setUserToDelete] = useState(null);
+  const dispatch = useDispatch()
+  const { users = [], status, error } = useSelector((state) => state.user)
+  const [searchTerm, setSearchTerm] = useState("")
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
+  const [userToDelete, setUserToDelete] = useState(null)
 
   useEffect(() => {
-    console.log('Status:', status); // Status'ü logla
-    if(status=="idle"){
-      dispatch(fetchUsers());
+    if (status === "idle") {
+      dispatch(fetchUsers())
     }
-  }, [dispatch,status]); // Sadece dispatch bağımlılık olarak bırakıldı
+  }, [dispatch, status])
 
-  // Kullanıcıları filtrele
-  const filteredUsers = users.filter(user =>
-    Object.values(user).some(value =>
-      value?.toString().toLowerCase().includes(searchTerm.toLowerCase())
-    )
-  );
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(() => {
+      if (searchTerm) {
+        dispatch(searchUsers({ username: searchTerm, email: searchTerm }))
+      } else {
+        dispatch(fetchUsers())
+      }
+    }, 300)
 
-  if (status === 'loading') {
-    return <Loader message="Kullanıcılar yükleniyor..." />;
+    return () => clearTimeout(delayDebounceFn)
+  }, [searchTerm, dispatch])
+
+  if (status === "loading") {
+    return <Loader message="Kullanıcılar yükleniyor..." />
   }
 
-  if (status === 'failed') {
-    return <div className="error">Hata: {error}</div>;
+  if (status === "failed") {
+    return <div className="error">Hata: {error}</div>
   }
 
   const handleDeleteClick = (user) => {
-    setUserToDelete(user);
-    setShowDeleteModal(true);
-  };
+    setUserToDelete(user)
+    setShowDeleteModal(true)
+  }
 
   const handleDeleteConfirm = async () => {
     if (userToDelete) {
       try {
-        await dispatch(deleteUser(userToDelete.id)).unwrap(); // unwrap hata fırlatırsa yakalayabiliriz
-        dispatch(fetchUsers()); // Kullanıcı listesini yeniden yükle
+        await dispatch(deleteUser(userToDelete.id)).unwrap()
+        dispatch(fetchUsers())
       } catch (err) {
-        console.error('Silme işlemi başarısız oldu:', err);
+        console.error("Silme işlemi başarısız oldu:", err)
       } finally {
-        setShowDeleteModal(false);
+        setShowDeleteModal(false)
       }
     }
-  };
+  }
 
   return (
     <Container fluid className="user-list-container">
@@ -63,6 +67,7 @@ const UserList = () => {
         </InputGroup.Text>
         <Form.Control
           placeholder="Kullanıcı ara..."
+          value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
       </InputGroup>
@@ -79,7 +84,7 @@ const UserList = () => {
           </tr>
         </thead>
         <tbody>
-          {filteredUsers.map((user, index) => {
+          {users.map((user, index) => {
             if (user.role === 0) {
               return (
                 <tr key={user.id} style={{ animationDelay: `${index * 0.1}s` }}>
@@ -88,16 +93,16 @@ const UserList = () => {
                   <td>{user.lastName}</td>
                   <td>{user.email}</td>
                   <td>{user.bio}</td>
-                  <td>{new Date(user.createdAt).toLocaleDateString('tr-TR')}</td>
+                  <td>{new Date(user.createdAt).toLocaleDateString("tr-TR")}</td>
                   <td>
                     <Button variant="outline-danger" size="sm" onClick={() => handleDeleteClick(user)}>
                       <FaTrash /> Sil
                     </Button>
                   </td>
                 </tr>
-              );
+              )
             }
-            return null;
+            return null
           })}
         </tbody>
       </Table>
@@ -119,7 +124,8 @@ const UserList = () => {
         </Modal.Footer>
       </Modal>
     </Container>
-  );
-};
+  )
+}
 
-export default UserList;
+export default UserList
+

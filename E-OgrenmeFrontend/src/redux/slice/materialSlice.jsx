@@ -4,12 +4,11 @@ import axios from "axios";
 const initialState = {
   materialList: [], // Tüm materyalleri getir
   material: null, // Tek bir materyal
-  message: "", // Kurs silindiğinde mesaj almak için
+  message: "", // metodan gelen mesaj almak için
   status: "idle", // API çağrısı durumu
   error: null, // Hata mesajı
 };
 
-const BASE_URL = "http://localhost:8080/rest/api/materal";
 
 // Material silme
 export const deleteMaterial = createAsyncThunk(

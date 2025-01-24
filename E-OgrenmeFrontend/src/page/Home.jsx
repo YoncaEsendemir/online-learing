@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { Container, Row, Col, Carousel, Card, Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
+import { fetchEnrollmentByUserId } from "../redux/slice/enrollmentSlice"
 import { useNavigate } from 'react-router-dom';
 import { fetchCategory } from '../redux/slice/categorySlice';
 import { fetchCourses } from '../redux/slice/courseSlice';
@@ -13,22 +14,32 @@ import '../css/home.css';
 function Home() {
   const dispatch = useDispatch();
   const navigate=useNavigate();
+  const { loggedInUser } = useSelector((state) => state.user)
+  const { enrollmentList, status: enrollmentStatus } = useSelector((state) => state.enrollment)
   const { categoryList, status: categoryStatus, error: categoryError } = useSelector((state) => state.category);
   const { courseList, status: courseStatus, error: courseError } = useSelector((state) => state.course);
 
   useEffect(() => {
-    if (categoryStatus === 'idle') {
+    if (categoryStatus === 'idle' && courseStatus === 'idle') {
       dispatch(fetchCategory());
+      dispatch(fetchCourses());
     }
-  }, [dispatch, categoryStatus]);
+  }, [dispatch, categoryStatus,dispatch, courseStatus]);
 
+    useEffect(() => {
+      if (loggedInUser) {
+        dispatch(fetchEnrollmentByUserId(loggedInUser.id))
+      }
+    }, [dispatch, loggedInUser])
+
+    /*
   useEffect(() => {
     if (courseStatus === 'idle') {
       dispatch(fetchCourses());
     }
   }, [dispatch, courseStatus]);
 
- 
+ */
   if (categoryStatus === 'loading' || courseStatus === 'loading') {
     return <Loader message="Veriler yükleniyor..." />;
   }
@@ -80,6 +91,28 @@ function Home() {
           <Col md={9}>
             <h2 className="mb-4">Kurslarım</h2>
             <Row>
+              {enrollmentList && enrollmentList.map((enrollment) => (
+                <Col md={4} key={enrollment.courseId}>
+                  <Card className="mb-4">
+                    <div style={{display:'flex' ,justifyContent:"center"}}>
+                    <Card.Img variant="top" style={{width:"100px", height:"100px"}} src={`http://localhost:8080${enrollment.courseImage}`} />
+                    </div>
+                    <Card.Body>
+                      <Card.Title>{enrollment.courseTitle} </Card.Title>
+                      <Card.Text>{enrollment.courseDescription} </Card.Text>
+                      <Button variant="primary"  onClick={()=>{navigate('/coursDetail/'+enrollment.courseId)}}>Kursa Git</Button>
+                    </Card.Body>
+                    </Card>
+                </Col>
+              ))}
+            </Row>
+          </Col>
+        </Row>
+        {/*  tüm kurslar geliyor  */}
+
+<Row md={9}>
+            <h2 className="mb-4">Tüm Kurslar</h2>
+            <Row>
               {courseList && courseList.map((course) => (
                 <Col md={4} key={course.id}>
                   <Card className="mb-4">
@@ -95,8 +128,7 @@ function Home() {
                 </Col>
               ))}
             </Row>
-          </Col>
-        </Row>
+            </Row>
       </Container>
     </div>
   );

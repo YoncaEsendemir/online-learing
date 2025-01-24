@@ -83,6 +83,15 @@ export const updateCourse = createAsyncThunk(
   }
 );
 
+export const searchCourses = createAsyncThunk("course/searchCourses", async (criteria, { rejectWithValue }) => {
+  try {
+    const response = await axios.post(`${BASE_URL}/search`, criteria)
+    return response.data
+  } catch (error) {
+    return rejectWithValue(error.response?.data || "Kurslar aranamadı")
+  }
+})
+
 const courseSlice = createSlice({
   name:'course',
   initialState,
@@ -160,6 +169,20 @@ const courseSlice = createSlice({
       state.status = 'failed';
       state.error = action.payload;
     });
+
+    //Kurs Arama için 
+    builder
+    .addCase(searchCourses.pending, (state) => {
+      state.status = "loading"
+    })
+    .addCase(searchCourses.fulfilled, (state, action) => {
+      state.status = "succeeded"
+      state.courseList = action.payload
+    })
+    .addCase(searchCourses.rejected, (state, action) => {
+      state.status = "failed"
+      state.error = action.payload
+    })
 
   },
 

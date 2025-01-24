@@ -12,7 +12,7 @@ import com.eogrenme.entits.Category;
 import com.eogrenme.entits.Course;
 import com.eogrenme.entits.CourseMaterial;
 import com.eogrenme.entits.Video;
-
+import com.eogrenme.dto.CourseSearchCriteria;
 import com.eogrenme.dto.DtoCategoryUI;
 import com.eogrenme.dto.DtoCourseMaterialUI;
 import com.eogrenme.dto.DtoCourseUI;
@@ -21,12 +21,14 @@ import com.eogrenme.repository.IRepositoryCategory;
 import com.eogrenme.repository.IRepositoryCourse;
 import com.eogrenme.repository.IRepositoryCourseMaterialRepository;
 import com.eogrenme.repository.IRepositoryCourseVideo;
-
+import com.eogrenme.repository.IRepositoryEnrollment; // Added import
 import com.eogrenme.serviece.IServiceCourse;
 
 @Service
 public class ServiceCourse implements IServiceCourse {
-
+/*Veritabanıyla etkileşime giren depoların bağımlılıklarını otomatik olarak enjekte
+ belirli veritabanı işlemlerini işler.
+ */
     @Autowired
     private IRepositoryCourse courseRepository;
 
@@ -38,6 +40,10 @@ public class ServiceCourse implements IServiceCourse {
 
     @Autowired
     private IRepositoryCourseVideo courseVideoRepository;
+
+    @Autowired
+    private IRepositoryEnrollment enrollmentRepository; // Added autowired repository
+
     @Override
     public DtoCourseUI addCourse(DtoCourseUI course ,String videoUrl) {
         if (course == null && videoUrl==null) {
@@ -166,7 +172,11 @@ public class ServiceCourse implements IServiceCourse {
             return false;
         }
         Course course = courseOptional.get();
-        // The cascade delete will handle related entities
+    
+        // First, delete all enrollments associated with this course
+        enrollmentRepository.deleteAllByCourseId(id);
+    
+        // Now delete the course
         courseRepository.delete(course);
         return true;
     }
@@ -225,6 +235,15 @@ public class ServiceCourse implements IServiceCourse {
         // Save and return
         Course updatedCourse = courseRepository.save(existingCourse);
         return convertToDto(updatedCourse);
+    }
+
+
+    @Override
+    public List<DtoCourseUI> searchCourses(CourseSearchCriteria criteria) {
+        List<Course> courses = courseRepository.searchCourses(criteria.getCourseName(), criteria.getCategory());
+        return courses.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
     }
 
     /* 
@@ -290,3 +309,4 @@ public class ServiceCourse implements IServiceCourse {
     }
     */
 }
+
